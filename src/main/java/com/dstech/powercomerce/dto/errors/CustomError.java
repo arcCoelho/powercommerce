@@ -1,4 +1,4 @@
-package com.dstech.powercomerce.dto;
+package com.dstech.powercomerce.dto.errors;
 
 import java.time.Instant;
 

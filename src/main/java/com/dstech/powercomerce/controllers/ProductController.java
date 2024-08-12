@@ -2,7 +2,9 @@ package com.dstech.powercomerce.controllers;
 
 import com.dstech.powercomerce.dto.ProductDTO;
 import com.dstech.powercomerce.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +32,7 @@ public class ProductController {
         return ResponseEntity.ok(page);
     }
     @PostMapping
-    public ResponseEntity<ProductDTO> save(@RequestBody ProductDTO product){
+    public ResponseEntity<ProductDTO> save(@Valid @RequestBody ProductDTO product){
         ProductDTO dto = service.insert(product);
         URI uri = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -42,7 +44,7 @@ public class ProductController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO product){
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @Valid @RequestBody ProductDTO product){
         ProductDTO dto = service.update(id, product);
 
         return  ResponseEntity.accepted().body(dto);

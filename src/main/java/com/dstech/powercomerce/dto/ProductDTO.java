@@ -2,14 +2,22 @@ package com.dstech.powercomerce.dto;
 
 
 import com.dstech.powercomerce.entities.Product;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 
 public class ProductDTO {
 
     private Long id;
+    @NotBlank(message = "campo obrigatório")
+    @Size(min = 3, max = 80, message = "o campo deve ter entre 3 e 80 caracteres")
     private String name;
+    @Size(min = 10, message = "o campo precisa ter no minimo 10 caracteres")
+    @NotBlank
     private String description;
+    @Positive(message = "o campo só aceita valores positivos")
     private Double price;
     private String imgUrl;
 

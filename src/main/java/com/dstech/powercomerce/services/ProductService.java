@@ -3,12 +3,16 @@ package com.dstech.powercomerce.services;
 import com.dstech.powercomerce.dto.ProductDTO;
 import com.dstech.powercomerce.entities.Product;
 import com.dstech.powercomerce.repositories.ProductRepository;
+import com.dstech.powercomerce.services.exceptions.DatabaseException;
 import com.dstech.powercomerce.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -30,9 +34,16 @@ public class ProductService {
         Page<Product> result = repository.findAll(pageable);
         return result.map(x->new ProductDTO(x));
     }
-    @Transactional
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void delete(Long id){
-        repository.deleteById(id);
+        if(!repository.existsById(id)){
+            throw new ResourceNotFoundException("Produto com id: "+id+" nao encontrado");
+        }
+        try {
+            repository.deleteById(id);
+        }catch (DataIntegrityViolationException e){
+            throw new DatabaseException("Falha de integridade relacional");
+        }
     }
     @Transactional
     public ProductDTO insert(ProductDTO dto){
@@ -45,16 +56,21 @@ public class ProductService {
 
     @Transactional
     public ProductDTO update(Long id, ProductDTO dto){
-        Product entity = repository.getReferenceById(id);
-        entity.setName(dto.getName());
-        entity.setDescription(dto.getDescription());
-        entity.setPrice(dto.getPrice());
-        entity.setImgUrl(dto.getImgUrl());
+        try {
+            Product entity = repository.getReferenceById(id);
+            entity.setName(dto.getName());
+            entity.setDescription(dto.getDescription());
+            entity.setPrice(dto.getPrice());
+            entity.setImgUrl(dto.getImgUrl());
 
-        entity = repository.save(entity);
+            entity = repository.save(entity);
 
-        ModelMapper modelMapper = new ModelMapper();
-        ProductDTO result = modelMapper.map(entity, ProductDTO.class);
-        return result;
+            ModelMapper modelMapper = new ModelMapper();
+            ProductDTO result = modelMapper.map(entity, ProductDTO.class);
+            return result;
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Produto com id: "+id+" nao encontrado");
+        }
+
     }
 }
