@@ -3,6 +3,7 @@ package com.dstech.powercomerce.services;
 import com.dstech.powercomerce.dto.ProductDTO;
 import com.dstech.powercomerce.entities.Product;
 import com.dstech.powercomerce.repositories.ProductRepository;
+import com.dstech.powercomerce.services.exceptions.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,9 +21,8 @@ public class ProductService {
     private ProductRepository repository;
 
     public ProductDTO findById(Long id){
-        Optional<Product> result = repository.findById(id);
-        Product produto = result.get();
-        ProductDTO dto = new ProductDTO(produto);
+        Product result = repository.findById(id).orElseThrow( ()-> new ResourceNotFoundException("Produto com id: "+id+" nao encontrado") );
+        ProductDTO dto = new ProductDTO(result);
         return dto;
     }
     @Transactional(readOnly = true)
