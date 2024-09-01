@@ -4,10 +4,10 @@ import com.dstech.powercomerce.dto.ProductDTO;
 import com.dstech.powercomerce.services.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -33,6 +33,8 @@ public class ProductController {
         Page page =  service.findAll(name, pageable);
         return ResponseEntity.ok(page);
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<ProductDTO> save(@Valid @RequestBody ProductDTO product){
         ProductDTO dto = service.insert(product);
@@ -45,6 +47,7 @@ public class ProductController {
         return ResponseEntity.created(uri).body(dto);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<ProductDTO> update(@PathVariable Long id, @Valid @RequestBody ProductDTO product){
         ProductDTO dto = service.update(id, product);
@@ -52,6 +55,7 @@ public class ProductController {
         return  ResponseEntity.accepted().body(dto);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> update(@PathVariable Long id){
         service.delete(id);
