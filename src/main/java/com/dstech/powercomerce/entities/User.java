@@ -83,7 +83,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return this.roles;
     }
 
     public String getPassword() {
@@ -121,4 +121,9 @@ public class User implements UserDetails {
     public void addRole(Role role) {
         this.roles.add(role);
     }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+    
 }

@@ -19,6 +19,7 @@ public class UserService implements UserDetailsService {
     private UserRepository repository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println("caiu aqui!!!!");
         List<UserDetailsProjection> authorizations = repository.searchUserAndRolesByEmail(username);
 
         if(authorizations.size() == 0){

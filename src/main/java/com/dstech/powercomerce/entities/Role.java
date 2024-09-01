@@ -3,6 +3,8 @@ package com.dstech.powercomerce.entities;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "tb_role")
 public class Role implements GrantedAuthority {
@@ -44,12 +46,12 @@ public class Role implements GrantedAuthority {
 
         Role role = (Role) o;
 
-        return id.equals(role.id);
+        return Objects.equals(authority, role.authority);
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return authority != null ? authority.hashCode() : 0;
     }
 
     @Override
