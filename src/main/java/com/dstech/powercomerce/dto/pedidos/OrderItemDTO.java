@@ -43,4 +43,14 @@ public class OrderItemDTO {
     public Double getSubTotal() {
         return this.getPrice() * this.getQuantity();
     }
+
+    @Override
+    public String toString() {
+        return "OrderItemDTO{" +
+                "productId=" + productId +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                '}';
+    }
 }

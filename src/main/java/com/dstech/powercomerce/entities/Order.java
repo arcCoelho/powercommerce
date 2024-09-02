@@ -92,6 +92,10 @@ public class Order {
         return items;
     }
 
+    public void addItem(OrderItem item){
+        this.items.add(item);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

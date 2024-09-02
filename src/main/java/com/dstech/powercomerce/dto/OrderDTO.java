@@ -6,6 +6,7 @@ import com.dstech.powercomerce.dto.pedidos.PaymentDTO;
 import com.dstech.powercomerce.entities.Order;
 import com.dstech.powercomerce.entities.OrderItem;
 import com.dstech.powercomerce.entities.OrderStatus;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class OrderDTO {
     private OrderStatus status;
     private ClientDTO client;
     private PaymentDTO payment;
+    @NotEmpty(message = "pelo menos 1 item é necessário")
     private List<OrderItemDTO> items = new ArrayList<>();
 
     public OrderDTO(Long id, Instant moment, OrderStatus status, ClientDTO client, PaymentDTO payment) {
@@ -71,5 +73,17 @@ public class OrderDTO {
             total = total + dto.getSubTotal();
         }
         return total;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderDTO{" +
+                "id=" + id +
+                ", moment=" + moment +
+                ", status=" + status +
+                ", client=" + client +
+                ", payment=" + payment +
+                ", items=" + items +
+                '}';
     }
 }
