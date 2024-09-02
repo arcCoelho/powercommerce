@@ -25,6 +25,7 @@ public class ProductService {
     @Autowired
     private ProductRepository repository;
 
+    @Transactional(readOnly = true)
     public ProductDTO findById(Long id){
         Product result = repository.findById(id).orElseThrow( ()-> new ResourceNotFoundException("Produto com id: "+id+" nao encontrado") );
         ProductDTO dto = new ProductDTO(result);
@@ -48,10 +49,11 @@ public class ProductService {
     }
     @Transactional
     public ProductDTO insert(ProductDTO dto){
-        ModelMapper modelMapper = new ModelMapper();
-        Product entity = modelMapper.map(dto, Product.class);
+        //ModelMapper modelMapper = new ModelMapper();
+        Product entity = new Product();
+        entity.dtoToEntity(dto);
         entity = repository.save(entity);
-        ProductDTO result = modelMapper.map(entity, ProductDTO.class);
+        ProductDTO result = new ProductDTO(entity);
         return result;
     }
 
@@ -59,15 +61,11 @@ public class ProductService {
     public ProductDTO update(Long id, ProductDTO dto){
         try {
             Product entity = repository.getReferenceById(id);
-            entity.setName(dto.getName());
-            entity.setDescription(dto.getDescription());
-            entity.setPrice(dto.getPrice());
-            entity.setImgUrl(dto.getImgUrl());
+            entity.dtoToEntity(dto);
 
             entity = repository.save(entity);
 
-            ModelMapper modelMapper = new ModelMapper();
-            ProductDTO result = modelMapper.map(entity, ProductDTO.class);
+            ProductDTO result = new ProductDTO(entity);
             return result;
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Produto com id: "+id+" nao encontrado");

@@ -3,9 +3,11 @@ package com.dstech.powercomerce.dto;
 
 import com.dstech.powercomerce.entities.Product;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
 import java.util.Objects;
 
 public class ProductDTO {
@@ -20,6 +22,9 @@ public class ProductDTO {
     @Positive(message = "o campo só aceita valores positivos")
     private Double price;
     private String imgUrl;
+
+    @NotEmpty(message = "Deve conter pelo menos 1 categoria")
+    private List<CategoryDTO> categories;
 
     public ProductDTO() {
     }
@@ -38,6 +43,8 @@ public class ProductDTO {
         this.description = produto.getDescription();
         this.price = produto.getPrice();
         this.imgUrl = produto.getImgUrl();
+
+        this.categories = produto.getCategories().stream().map(x -> new CategoryDTO(x)).toList();
     }
 
     public Long getId() {
@@ -88,6 +95,10 @@ public class ProductDTO {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public List<CategoryDTO> getCategories() {
+        return categories;
     }
 
     @Override

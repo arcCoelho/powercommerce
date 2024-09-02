@@ -1,11 +1,13 @@
 package com.dstech.powercomerce.entities;
 
+import com.dstech.powercomerce.dto.ProductDTO;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "tb_product")
@@ -39,6 +41,16 @@ public class Product {
         this.description = description;
         this.price = price;
         this.imgUrl = url;
+    }
+
+    public void dtoToEntity(ProductDTO dto) {
+        this.name = dto.getName();
+        this.description = dto.getDescription();
+        this.price = dto.getPrice();
+        this.imgUrl = dto.getImgUrl();
+
+        this.categories.clear();
+        this.categories = dto.getCategories().stream().map(x-> new Category(x.getId(), x.getName())).collect(Collectors.toSet());
     }
 
     public Long getId() {
