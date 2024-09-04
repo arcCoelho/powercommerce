@@ -3,6 +3,7 @@ package com.dstech.powercomerce.controllers.handlers;
 import com.dstech.powercomerce.dto.errors.CustomError;
 import com.dstech.powercomerce.dto.errors.ValidationError;
 import com.dstech.powercomerce.services.exceptions.DatabaseException;
+import com.dstech.powercomerce.services.exceptions.ForbiddenException;
 import com.dstech.powercomerce.services.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -52,6 +53,18 @@ public class ControllerExceptionHandler {
         for(FieldError f : e.getBindingResult().getFieldErrors()){
             error.addError(f.getField(), f.getDefaultMessage());
         }
+        return ResponseEntity.status(status).body(error);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<CustomError> Forbidden(ForbiddenException e, HttpServletRequest request){
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        CustomError error = new CustomError(
+                Instant.now(),
+                status.value(),
+                e.getMessage(),
+                request.getRequestURI()
+        );
         return ResponseEntity.status(status).body(error);
     }
 

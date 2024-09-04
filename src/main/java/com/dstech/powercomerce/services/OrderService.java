@@ -6,6 +6,7 @@ import com.dstech.powercomerce.entities.*;
 import com.dstech.powercomerce.repositories.OrderItemRespository;
 import com.dstech.powercomerce.repositories.OrderRepository;
 import com.dstech.powercomerce.repositories.ProductRepository;
+import com.dstech.powercomerce.services.exceptions.ForbiddenException;
 import com.dstech.powercomerce.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,9 +28,13 @@ public class OrderService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private AuthService authService;
+
     @Transactional(readOnly = true)
     public OrderDTO findByid(Long id) {
         Order order = orderRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Compra não encontrada"));
+        authService.validateSelfOrAdmin(order.getClient().getId());
         return new OrderDTO(order);
     }
 
