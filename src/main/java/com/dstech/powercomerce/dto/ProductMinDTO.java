@@ -7,38 +7,28 @@ import jakarta.validation.constraints.*;
 import java.util.List;
 import java.util.Objects;
 
-public class ProductDTO {
+public class ProductMinDTO {
 
     private Long id;
-    @NotBlank(message = "campo obrigatório")
-    @Size(min = 3, max = 80, message = "o campo deve ter entre 3 e 80 caracteres")
     private String name;
-    @Size(min = 10, message = "o campo precisa ter no minimo 10 caracteres")
-    @NotBlank
-    private String description;
-    @Positive(message = "o campo só aceita valores positivos")
-    @NotNull(message = "O campo preço é obrigatório")
     private Double price;
     private String imgUrl;
 
-    @NotEmpty(message = "Deve conter pelo menos 1 categoria")
     private List<CategoryDTO> categories;
 
-    public ProductDTO() {
+    public ProductMinDTO() {
     }
 
-    public ProductDTO(Long id, String name, String description, Double price, String imgUrl) {
+    public ProductMinDTO(Long id, String name, Double price, String imgUrl) {
         this.id = id;
         this.name = name;
-        this.description = description;
         this.price = price;
         this.imgUrl = imgUrl;
     }
 
-    public ProductDTO(Product produto) {
+    public ProductMinDTO(Product produto) {
         this.id = produto.getId();
         this.name = produto.getName();
-        this.description = produto.getDescription();
         this.price = produto.getPrice();
         this.imgUrl = produto.getImgUrl();
 
@@ -53,9 +43,6 @@ public class ProductDTO {
         return name;
     }
 
-    public String getDescription() {
-        return description;
-    }
 
     public Double getPrice() {
         return price;
@@ -70,7 +57,7 @@ public class ProductDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ProductDTO that = (ProductDTO) o;
+        ProductMinDTO that = (ProductMinDTO) o;
 
         return Objects.equals(id, that.id);
     }
@@ -81,10 +68,6 @@ public class ProductDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public void setPrice(Double price) {
@@ -109,7 +92,6 @@ public class ProductDTO {
         return "ProductDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
                 ", price=" + price +
                 ", imgUrl='" + imgUrl + '\'' +
                 '}';

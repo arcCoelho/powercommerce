@@ -1,6 +1,7 @@
 package com.dstech.powercomerce.services;
 
 import com.dstech.powercomerce.dto.ProductDTO;
+import com.dstech.powercomerce.dto.ProductMinDTO;
 import com.dstech.powercomerce.entities.Product;
 import com.dstech.powercomerce.repositories.ProductRepository;
 import com.dstech.powercomerce.services.exceptions.DatabaseException;
@@ -32,9 +33,9 @@ public class ProductService {
         return dto;
     }
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findAll(String name, Pageable pageable){
+    public Page<ProductMinDTO> findAll(String name, Pageable pageable){
         Page<Product> result = repository.searchByName(name, pageable);
-        return result.map(x->new ProductDTO(x));
+        return result.map(x->new ProductMinDTO(x));
     }
     @Transactional(propagation = Propagation.SUPPORTS)
     public void delete(Long id){

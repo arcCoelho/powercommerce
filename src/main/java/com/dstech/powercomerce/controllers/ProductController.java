@@ -1,6 +1,7 @@
 package com.dstech.powercomerce.controllers;
 
 import com.dstech.powercomerce.dto.ProductDTO;
+import com.dstech.powercomerce.dto.ProductMinDTO;
 import com.dstech.powercomerce.services.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class ProductController {
         return  ResponseEntity.ok(dto);
     }
     @GetMapping
-    public ResponseEntity<Page<ProductDTO>> listAll(
+    public ResponseEntity<Page<ProductMinDTO>> listAll(
             @RequestParam(name = "name", defaultValue = "") String name,
             Pageable pageable){
         Page page =  service.findAll(name, pageable);
